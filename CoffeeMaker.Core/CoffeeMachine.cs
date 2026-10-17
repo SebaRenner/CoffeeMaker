@@ -12,6 +12,13 @@ public class CoffeeMachine
 
     private readonly GroundsContainer _groundsContainer;
 
+    private static readonly IReadOnlyDictionary<CoffeeType, BrewingInstruction> BrewingInstructions =
+        new Dictionary<CoffeeType, BrewingInstruction>
+        {
+            [CoffeeType.Espresso] = new() { WaterAmountMl = 40, BeanCount = 120 },
+            [CoffeeType.Regular] = new() { WaterAmountMl = 150, BeanCount = 150 },
+        };
+
     public bool IsPoweredOn { get; private set; }
 
     public CoffeeMachine(WaterTank waterTank, BeanHopper beanHopper, Grinder grinder, GroundsContainer groundsContainer)
@@ -39,6 +46,8 @@ public class CoffeeMachine
 
     private void Brew(CoffeeType coffeeType)
     {
+        var instruction = BrewingInstructions[coffeeType];
+
         throw new NotImplementedException();
     }
 }
