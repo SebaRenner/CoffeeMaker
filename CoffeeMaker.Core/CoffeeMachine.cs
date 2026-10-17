@@ -14,22 +14,31 @@ public class CoffeeMachine
 
     public bool IsPoweredOn { get; private set; }
 
-    public CoffeeMachine(WaterTank waterTank, BeanHopper beanHopper, Grinder grinder, ControlPanel controlPanel, GroundsContainer groundsContainer)
+    public CoffeeMachine(WaterTank waterTank, BeanHopper beanHopper, Grinder grinder, GroundsContainer groundsContainer)
     {
         _waterTank = waterTank;
         _beanHopper = beanHopper;
         _grinder = grinder;
-        _controlPanel = controlPanel;
         _groundsContainer = groundsContainer;
+
+        _controlPanel = new ControlPanel(
+            onPowerPressed: TogglePower,
+            onEspressoPressed: () => Brew(CoffeeType.Espresso),
+            onCoffeePressed: () => Brew(CoffeeType.Regular));
     }
 
-    public void TurnOn()
+    private void TogglePower()
     {
-        IsPoweredOn = true;
+        if (IsPoweredOn) TurnOff();
+        else TurnOn();
     }
 
-    public void TurnOff()
+    private void TurnOn() => IsPoweredOn = true;
+
+    private void TurnOff() => IsPoweredOn = false;
+
+    private void Brew(CoffeeType coffeeType)
     {
-        IsPoweredOn = false;
-    } 
+        throw new NotImplementedException();
+    }
 }
