@@ -2,15 +2,15 @@
 
 public class CoffeeMachine
 {
-    private readonly WaterTank _waterTank;
-
-    private readonly BeanHopper _beanHopper;
-
     private readonly Grinder _grinder;
 
-    private readonly ControlPanel _controlPanel;
+    public WaterTank WaterTank { get; }
 
-    private readonly GroundsContainer _groundsContainer;
+    public BeanHopper BeanHopper { get; }
+
+    public GroundsContainer GroundsContainer { get; }
+
+    public ControlPanel ControlPanel { get; }
 
     private static readonly IReadOnlyDictionary<CoffeeType, BrewingInstruction> BrewingInstructions =
         new Dictionary<CoffeeType, BrewingInstruction>
@@ -21,14 +21,15 @@ public class CoffeeMachine
 
     public bool IsPoweredOn { get; private set; }
 
-    public CoffeeMachine(WaterTank waterTank, BeanHopper beanHopper, Grinder grinder, GroundsContainer groundsContainer)
+    public CoffeeMachine(WaterTank waterTank, BeanHopper beanHopper, GroundsContainer groundsContainer)
     {
-        _waterTank = waterTank;
-        _beanHopper = beanHopper;
-        _grinder = grinder;
-        _groundsContainer = groundsContainer;
+        _grinder = new Grinder();
 
-        _controlPanel = new ControlPanel(
+        WaterTank = waterTank;
+        BeanHopper = beanHopper;
+        GroundsContainer = groundsContainer;
+
+        ControlPanel = new ControlPanel(
             onPowerPressed: TogglePower,
             onEspressoPressed: () => Brew(CoffeeType.Espresso),
             onCoffeePressed: () => Brew(CoffeeType.Regular));
