@@ -1,8 +1,12 @@
-﻿namespace CoffeeMaker.Core;
+﻿using CoffeeMaker.Core.Events;
+
+namespace CoffeeMaker.Core;
 
 public class CoffeeMachine
 {
     private readonly Grinder _grinder;
+
+    private readonly List<DomainEvent> _events = new();
 
     public WaterTank WaterTank { get; }
 
@@ -12,12 +16,16 @@ public class CoffeeMachine
 
     public ControlPanel ControlPanel { get; }
 
+    public IReadOnlyList<DomainEvent> Events => _events;
+
     private static readonly IReadOnlyDictionary<CoffeeType, BrewingInstruction> BrewingInstructions =
         new Dictionary<CoffeeType, BrewingInstruction>
         {
             [CoffeeType.Espresso] = new() { WaterAmountMl = 40, BeanCount = 120 },
             [CoffeeType.Regular] = new() { WaterAmountMl = 150, BeanCount = 150 },
         };
+
+    
 
     public bool IsPoweredOn { get; private set; }
 
@@ -41,9 +49,17 @@ public class CoffeeMachine
         else TurnOn();
     }
 
-    private void TurnOn() => IsPoweredOn = true;
+    private void TurnOn()
+    {
+        IsPoweredOn = true;
+        AddEvent(new MachineTurnedOn());
+    }
 
-    private void TurnOff() => IsPoweredOn = false;
+    private void TurnOff()
+    {
+        IsPoweredOn = false;
+        AddEvent(new MachineTurnedOff());
+    }
 
     private void Brew(CoffeeType coffeeType)
     {
@@ -72,6 +88,9 @@ public class CoffeeMachine
         WaterTank.ConsumeWater(instruction.WaterAmountMl);
         BeanHopper.ConsumeBeans(instruction.BeanCount);
 
+        AddEvent(new CoffeeBrewed(coffeeType));
         Console.WriteLine("Here you go: ☕");
     }
+
+    private void AddEvent(DomainEvent domainEvent) => _events.Add(domainEvent);
 }
