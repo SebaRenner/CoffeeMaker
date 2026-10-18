@@ -15,4 +15,14 @@ public class WaterTank
     {
         CurrentVolumeMl = MaxVolumeMl;
     }
+
+    internal void ConsumeWater(int volumeMl)
+    {
+        CurrentVolumeMl -= volumeMl;
+    }
+
+    internal bool HasEnoughWater(int requiredVolumeMl)
+    {
+        return CurrentVolumeMl >= requiredVolumeMl;
+    }
 }

@@ -15,4 +15,14 @@ public class BeanHopper
     {
         CurrentBeanCount = MaxBeanCount;
     }
+
+    internal void ConsumeBeans(int beanCount)
+    {
+        CurrentBeanCount -= beanCount;
+    }
+
+    internal bool HasEnoughBeans(int requiredBeanCount)
+    {
+        return CurrentBeanCount >= requiredBeanCount;
+    }
 }

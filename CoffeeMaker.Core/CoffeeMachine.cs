@@ -49,6 +49,29 @@ public class CoffeeMachine
     {
         var instruction = BrewingInstructions[coffeeType];
 
-        throw new NotImplementedException();
+        if (!IsPoweredOn)
+        {
+            Console.WriteLine("Machine is turned off.");
+            return;
+        }
+
+        if (!WaterTank.HasEnoughWater(instruction.WaterAmountMl))
+        {
+            Console.WriteLine("Not enough water in the tank.");
+            return;
+        }
+
+        if (!BeanHopper.HasEnoughBeans(instruction.BeanCount))
+        {
+            Console.WriteLine("Not enough beans in the hopper.");
+            return;
+        }
+
+        Console.WriteLine("Brewing your coffee...");
+
+        WaterTank.ConsumeWater(instruction.WaterAmountMl);
+        BeanHopper.ConsumeBeans(instruction.BeanCount);
+
+        Console.WriteLine("Here you go: ☕");
     }
 }
